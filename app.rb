@@ -24,6 +24,11 @@ helpers do
   end
 end
 
+helpers do
+  include Rack::Utils
+  alias_method :h, :escape_html
+end
+
 # get ALL posts
 get "/" do
   @posts = Post.order("created_at DESC")
@@ -65,4 +70,11 @@ put "/posts/:id" do
   @post = Post.find(params[:id])
   @post.update(params[:post])
   redirect "/posts/#{@post.id}"
+end
+
+#delete post
+get "/posts/:id/delete" do
+  @post = Post.find(params[:id])
+  @post.delete()
+  redirect "/", :notice => 'Post was removed! (This message will disapear in 4 seconds.)'
 end
